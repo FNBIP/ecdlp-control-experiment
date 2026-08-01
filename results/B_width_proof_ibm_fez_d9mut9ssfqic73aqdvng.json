@@ -1,0 +1,37 @@
+{
+  "experiment": "B_width_proof",
+  "backend": "ibm_fez",
+  "shots": 512,
+  "job_id": "d9mut9ssfqic73aqdvng",
+  "qpu_seconds": 3,
+  "points": [
+    {
+      "qubits": 10,
+      "cx": 21,
+      "transpiled_depth": 36,
+      "correlated_fraction": 0.439453125,
+      "depolarised_expectation": 0.001953125
+    },
+    {
+      "qubits": 25,
+      "cx": 66,
+      "transpiled_depth": 69,
+      "correlated_fraction": 0.28515625,
+      "depolarised_expectation": 5.960464477539063e-08
+    },
+    {
+      "qubits": 50,
+      "cx": 164,
+      "transpiled_depth": 104,
+      "correlated_fraction": 0.052734375,
+      "depolarised_expectation": 1.7763568394002505e-15
+    },
+    {
+      "qubits": 100,
+      "cx": 358,
+      "transpiled_depth": 156,
+      "correlated_fraction": 0.0,
+      "depolarised_expectation": 1.5777218104420236e-30
+    }
+  ]
+}

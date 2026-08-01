@@ -1,0 +1,58 @@
+{
+  "experiment": "A_depth_cliff",
+  "backend": "ibm_fez",
+  "qubits": 9,
+  "shots": 512,
+  "job_id": "d9musrksfqic73aqdv6g",
+  "qpu_seconds": 3,
+  "points": [
+    {
+      "layers": 1,
+      "cz": 8,
+      "transpiled_depth": 8,
+      "return_probability": 0.732421875
+    },
+    {
+      "layers": 2,
+      "cz": 16,
+      "transpiled_depth": 15,
+      "return_probability": 0.6875
+    },
+    {
+      "layers": 5,
+      "cz": 40,
+      "transpiled_depth": 36,
+      "return_probability": 0.58203125
+    },
+    {
+      "layers": 10,
+      "cz": 80,
+      "transpiled_depth": 71,
+      "return_probability": 0.5546875
+    },
+    {
+      "layers": 20,
+      "cz": 160,
+      "transpiled_depth": 141,
+      "return_probability": 0.33203125
+    },
+    {
+      "layers": 50,
+      "cz": 400,
+      "transpiled_depth": 351,
+      "return_probability": 0.03515625
+    },
+    {
+      "layers": 100,
+      "cz": 800,
+      "transpiled_depth": 701,
+      "return_probability": 0.001953125
+    },
+    {
+      "layers": 200,
+      "cz": 1600,
+      "transpiled_depth": 1401,
+      "return_probability": 0.0
+    }
+  ]
+}

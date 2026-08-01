@@ -100,6 +100,80 @@ Resource estimates from Babbush et al. 2026 ([IACR ePrint 2026/625](https://epri
 The gap is ~10⁶× in depth, and 156 physical qubits without error correction provide **zero**
 logical qubits.
 
+
+## What 156 qubits can actually do
+
+The ECDLP failure prompted three follow-up measurements on the same device.
+Raw data in `results/`, code in `src/hardware_limits.py`.
+
+### The depth wall, measured
+
+Mirror circuits (`U` then `U†`, which must return `|00…0⟩` noise-free) on 9 qubits:
+
+| layers | CZ | P(return to \|0⟩) |
+|---|---|---|
+| 1 | 8 | 73.2% |
+| 10 | 80 | 55.5% |
+| 20 | 160 | 33.2% |
+| 50 | 400 | 3.5% |
+| 200 | 1600 | 0.0% |
+
+**Usable coherent depth is ~12 layers / ~100 CZ gates at 50% fidelity.**
+
+Note the correction this forces: dividing median T2 (88 µs) by layer duration
+(~100 ns) predicts ~880 usable layers. The measured figure is ~60× smaller,
+because that estimate counts only idle decoherence and ignores per-gate error.
+Calibration arithmetic overstates the depth budget by nearly two orders of
+magnitude. The ECDLP circuit needed 571 CZ — 5.7× past the measured wall.
+
+### Width is not the constraint
+
+Shallow GHZ entanglers, same device, same day:
+
+| qubits | 2q gates | depth | correlated fraction | if fully depolarised |
+|---|---|---|---|---|
+| 10 | 21 | 36 | 43.9% | 2.0e-03 |
+| 25 | 66 | 69 | 28.5% | 6.0e-08 |
+| 50 | 164 | 104 | 5.3% | 1.8e-15 |
+| 100 | 358 | 156 | 0.0% | 1.6e-30 |
+
+25 qubits stay correlated at **28.5%**, seven orders of magnitude above the
+depolarised floor, while 9 qubits arranged deeply return nothing. Correlation
+survives width and dies to depth.
+
+(Reported statistic is the fraction of shots on all-zeros or all-ones: a
+decoherence probe, *not* an entanglement witness — a classically correlated
+mixture scores identically. It shows correlation survived, nothing stronger.)
+
+### Grover works — the positive control
+
+4-bit toy hash, target `1011`, on the same backend that returned nothing for ECDLP:
+
+| iterations | P(target) |
+|---|---|
+| 0 | 5.8% (uniform = 6.25%) |
+| 1 | 39.6% |
+| **2** | **52.4%** |
+| 3 | 45.2% |
+| 4 | 25.0% |
+
+**8× over baseline.** Quantum advantage is plainly visible on this hardware when
+the circuit is shallow, which rules out the pipeline, the decoder and the device
+as explanations for the ECDLP null. The peak arriving at 2 iterations instead of
+the theoretical 3 is itself the depth wall: noise accumulates faster than
+amplitude amplification gains.
+
+And the scaling is the point. Grover buys a square root and its iterations are
+inherently sequential — a SHA-256 preimage needs ~2^153 error-corrected cycles.
+
+### Cross-device
+
+The same ECDLP circuit on `ibm_marrakesh`: true-key share **12.05% ± 2.40%**,
+against 14.29% uniform (t = −4.16) — significantly *below* chance. On the noisier
+device more weight collapses onto `k=0`, the ground state, crowding out
+everything else. Deviation from uniform tracks decoherence, in either direction,
+and never tracks computation.
+
 ## Limitations
 
 - **One curve size.** The 4-bit instance failed, so larger rungs were not run. The 6-bit
