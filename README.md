@@ -10,7 +10,7 @@ both against a coin toss.
 
 All three perform the same.
 
-**Total cost: 11 seconds of QPU time on IBM's free Open Plan.**
+**Total cost: 25 seconds of QPU time on IBM's free Open Plan.**
 
 ## Result
 
@@ -166,13 +166,42 @@ amplitude amplification gains.
 And the scaling is the point. Grover buys a square root and its iterations are
 inherently sequential — a SHA-256 preimage needs ~2^153 error-corrected cycles.
 
-### Cross-device
+### Grover scales the wrong way on hardware
 
-The same ECDLP circuit on `ibm_marrakesh`: true-key share **12.05% ± 2.40%**,
-against 14.29% uniform (t = −4.16) — significantly *below* chance. On the noisier
-device more weight collapses onto `k=0`, the ground state, crowding out
-everything else. Deviation from uniform tracks decoherence, in either direction,
-and never tracks computation.
+Grover's algorithm is the quantum attack on hash preimages, so it is the one that
+matters for hash-based signatures rather than for ECDSA. Toy hash, `ibm_fez`:
+
+| bits | N | theory at optimal k | **hardware** | advantage | CZ |
+|---|---|---|---|---|---|
+| 3 | 8 | 94.5% | **76.0%** | 6.1× | 39 |
+| 4 | 16 | 96.1% | **48.0%** | 7.7× | 75 |
+| 5 | 32 | **99.9%** | **10.5%** | 3.4× | 262 |
+
+Theory says success *rises* toward certainty as the search space grows — more
+iterations mean sharper amplification. On hardware it collapses, because each
+extra bit costs more gates than the extra amplification is worth.
+
+Gate error alone does not explain it. At 5 bits the CZ-error model predicts
+48.6% and the machine returned 10.5%, so crosstalk, readout and idle
+decoherence account for roughly another factor of five.
+
+Extrapolating, with the caveat that the oracle here is a phase flip rather than a
+real SHA-256 circuit: a preimage needs ~2^128 iterations, one iteration already
+costs ~65 CZ at 5 bits, so ~10^40 gates against a measured usable depth of ~100.
+
+### Cross-device: all three, including the best chip
+
+| backend | 2Q error (best edge) | true-key share | t vs uniform |
+|---|---|---|---|
+| `ibm_kingston` | **7.84e-4** | 15.39% ± 2.76% | +1.79 |
+| `ibm_fez` | 1.34e-3 | 14.87% ± 2.13% | +1.24 |
+| `ibm_marrakesh` | 1.17e-3 | 12.05% ± 2.40% | −4.16 |
+
+Uniform is 14.29%. **The best-calibrated device on the fleet returns nothing
+either**, which closes the "a better machine would work" objection. `ibm_marrakesh`
+lands significantly *below* chance: on the noisiest device more weight collapses
+onto `k=0`, the ground state, crowding the true key out. Deviation from uniform
+tracks decoherence in either direction and never tracks computation.
 
 ## Limitations
 

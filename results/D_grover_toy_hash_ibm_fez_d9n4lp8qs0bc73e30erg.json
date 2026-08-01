@@ -1,0 +1,37 @@
+{
+  "experiment": "D_grover_toy_hash",
+  "backend": "ibm_fez",
+  "bits": 3,
+  "target": 5,
+  "optimal_iterations": 2,
+  "uniform_baseline": 0.125,
+  "shots": 1024,
+  "job_id": "d9n4lp8qs0bc73e30erg",
+  "qpu_seconds": 3,
+  "points": [
+    {
+      "iterations": 0,
+      "cz": 0,
+      "transpiled_depth": 4,
+      "target_probability": 0.123046875
+    },
+    {
+      "iterations": 1,
+      "cz": 17,
+      "transpiled_depth": 68,
+      "target_probability": 0.654296875
+    },
+    {
+      "iterations": 2,
+      "cz": 39,
+      "transpiled_depth": 139,
+      "target_probability": 0.759765625
+    },
+    {
+      "iterations": 3,
+      "cz": 57,
+      "transpiled_depth": 205,
+      "target_probability": 0.2578125
+    }
+  ]
+}
