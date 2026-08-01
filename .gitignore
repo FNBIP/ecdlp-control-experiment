@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.venv/
+# never commit credentials
+qiskit-ibm.json
+apikey.json
+*.token
+.env
